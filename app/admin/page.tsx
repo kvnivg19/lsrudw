@@ -12,7 +12,8 @@ import {
   Table,
   TableCell,
   TableRow,
-  WidthType
+  WidthType,
+  TextRun
 } from "docx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -613,36 +614,81 @@ async function deleteEvent(event: EventRow) {
 
 async function exportWord(event: EventRow | null, attendance: Attendance[]) {
   if (!event) return;
-  const rows = [
+ const rows = [
+  new TableRow({
+    children: [
+      new TableCell({
+        children: [
+          new Paragraph({
+            children: [new TextRun({ text: "No", bold: true })]
+          })
+        ]
+      }),
+      new TableCell({
+        children: [
+          new Paragraph({
+            children: [new TextRun({ text: "Nama", bold: true })]
+          })
+        ]
+      }),
+      new TableCell({
+        children: [
+          new Paragraph({
+            children: [new TextRun({ text: "Tanggal", bold: true })]
+          })
+        ]
+      })
+    ]
+  })
+];
+ attendance.forEach((item, index) => {
+  rows.push(
     new TableRow({
       children: [
-        new TableCell({ children: [new Paragraph({ text: "No", bold: true })] }),
-        new TableCell({ children: [new Paragraph({ text: "Nama", bold: true })] }),
-        new TableCell({ children: [new Paragraph({ text: "Tanggal", bold: true })] })
+        new TableCell({
+          children: [new Paragraph(String(index + 1))]
+        }),
+        new TableCell({
+          children: [
+            new Paragraph(item.participant?.full_name || "Peserta")
+          ]
+        }),
+        new TableCell({
+          children: [
+            new Paragraph(formatDate(event.event_date))
+          ]
+        })
       ]
     })
-  ];
-  attendance.forEach((item, index) => {
-    rows.push(new TableRow({
-      children: [
-        new TableCell({ children: [new Paragraph(String(index + 1))] }),
-        new TableCell({ children: [new Paragraph(item.participant?.full_name || "Peserta")] }),
-        new TableCell({ children: [new Paragraph(formatDate(event.event_date))] })
-      ]
-    }));
-  });
+  );
+});
 
   const document = new Document({
     sections: [{
       properties: {},
       children: [
         new Paragraph({ text: "DAFTAR KEHADIRAN LANSIA", heading: HeadingLevel.TITLE, alignment: AlignmentType.CENTER }),
-        new Paragraph({ text: event.name, bold: true, alignment: AlignmentType.CENTER }),
+        new Paragraph({
+  alignment: AlignmentType.CENTER,
+  children: [
+    new TextRun({
+      text: event.name,
+      bold: true
+    })
+  ]
+}),
         new Paragraph({ text: `${formatDate(event.event_date)} • ${event.location}`, alignment: AlignmentType.CENTER }),
         new Paragraph({ text: "" }),
         new Table({ rows, width: { size: 100, type: WidthType.PERCENTAGE } }),
         new Paragraph({ text: "" }),
-        new Paragraph({ text: `Total hadir: ${attendance.length} peserta`, bold: true })
+        new Paragraph({
+  children: [
+    new TextRun({
+      text: `Total hadir: ${attendance.length} peserta`,
+      bold: true
+    })
+  ]
+})
       ]
     }]
   });
