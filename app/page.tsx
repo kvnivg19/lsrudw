@@ -219,9 +219,8 @@ export default function HomePage() {
         <div className="topbar-inner">
           <div>
             <div className="brand">Lansia SMART RSUD Wonosari</div>
-            <div className="subbrand">Sederhana • Cepat • Mudah digunakan</div>
+            <div className="subbrand">Sehat • Mandiri • Aktif • Religius • Tidak Pikun</div>
           </div>
-          <a className="admin-link" href="/admin">Admin</a>
         </div>
       </header>
 
