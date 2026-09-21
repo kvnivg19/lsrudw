@@ -641,27 +641,33 @@ async function exportWord(event: EventRow | null, attendance: Attendance[]) {
     ]
   })
 ];
- attendance.forEach((item, index) => {
-  rows.push(
-    new TableRow({
+  attendance.forEach((item, index) => {
+    rows.push(new TableRow({
       children: [
         new TableCell({
-          children: [new Paragraph(String(index + 1))]
-        }),
-        new TableCell({
-          children: [
-            new Paragraph(item.participant?.full_name || "Peserta")
-          ]
-        }),
-        new TableCell({
-          children: [
-            new Paragraph(formatDate(event.event_date))
-          ]
-        })
-      ]
+  children: [
+    new Paragraph({
+      children: [new TextRun({ text: "No", bold: true })]
     })
-  );
-});
+  ]
+}),
+new TableCell({
+  children: [
+    new Paragraph({
+      children: [new TextRun({ text: "Nama", bold: true })]
+    })
+  ]
+}),
+new TableCell({
+  children: [
+    new Paragraph({
+      children: [new TextRun({ text: "Tanggal", bold: true })]
+    })
+  ]
+})
+      ]
+    }));
+  });
 
   const document = new Document({
     sections: [{
