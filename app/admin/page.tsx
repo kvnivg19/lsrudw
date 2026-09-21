@@ -486,7 +486,7 @@ async function deleteEvent(event: EventRow) {
 
   const dailyCounts = useMemo(() => {
     const counts = new Map<string, number>();
-    if (demo) {
+    if (demo && typeof window !== "undefined") {
       const ats: any[] = JSON.parse(localStorage.getItem("demo_attendance_v2") || "[]");
       ats.forEach((item) => {
         const eventForDate = events.find((e) => e.id === item.event_id);
