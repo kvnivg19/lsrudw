@@ -196,10 +196,34 @@ export default function HomePage() {
       return;
     }
 
-    const { error: insertError } = await supabase.from("attendance").insert({
-      event_id: event.id,
-      participant_id: matched.id
-    });
+    const { data, error: insertError } = await supabase.rpc(
+  "submit_attendance",
+  {
+    p_event_id: event.id,
+    p_participant_id: matched.id
+  }
+);
+
+setConfirming(false);
+
+if (insertError) {
+  showToast(insertError.message);
+  return;
+}
+
+if (!data?.success) {
+  showToast(data?.message || "Kehadiran gagal dicatat.");
+
+  if (data?.duplicate) {
+    setAlreadyPresent(true);
+  }
+
+  return;
+}
+
+setAlreadyPresent(true);
+setSearch("");
+showToast("✓ Kehadiran berhasil dicatat.");
 
     setConfirming(false);
     if (insertError) {
