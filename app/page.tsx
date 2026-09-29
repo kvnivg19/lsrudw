@@ -297,7 +297,7 @@ showToast("✓ Kehadiran berhasil dicatat.");
               autoComplete="off"
             />
             <div className="hint">
-              Ketik nama lengkap sesuai data peserta. Nama akan muncul jika sesuai.
+              Ketik nama lengkap sesuai KTP. Nama akan muncul jika sesuai.
             </div>
 
             {secondsLeft <= 300 && (
@@ -306,7 +306,10 @@ showToast("✓ Kehadiran berhasil dicatat.");
 
             <div className="results">
               {normalizedSearch && normalizedSearch.split(" ").length >= 2 && !matched && (
-                <div className="empty">Nama lengkap tidak ditemukan. Periksa kembali penulisan nama Anda.</div>
+                <div className="empty">
+  Nama belum ditemukan.<br />
+  Pastikan nama lengkap sesuai KTP.
+</div>
               )}
 
               {matched && (
