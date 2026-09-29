@@ -226,11 +226,20 @@ setSearch("");
 showToast("✓ Kehadiran berhasil dicatat.");
 
     setConfirming(false);
-    if (insertError) {
-      showToast(insertError.code === "23505" ? "Peserta ini sudah tercatat hadir." : insertError.message);
-      if (insertError.code === "23505") setAlreadyPresent(true);
-      return;
-    }
+    if (error) {
+  const dbError = error as unknown as {
+    code?: string;
+    message?: string;
+  };
+
+  showToast(
+    dbError.code === "23505"
+      ? "Peserta ini sudah tercatat hadir."
+      : dbError.message || "Gagal mencatat kehadiran."
+  );
+
+  return;
+}
 
     setAlreadyPresent(true);
     setSearch("");
